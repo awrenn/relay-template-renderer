@@ -8,6 +8,6 @@ RUN go build -o renderder
 
 FROM debian:latest
 
-COPY --from=build /pkg/renderder /bin
+COPY --from=build /pkg/renderder /bin/renderer
 
 CMD ["/bin/renderer"]
