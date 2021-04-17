@@ -1,0 +1,50 @@
+apiVersion: integration/v1
+kind: Step
+name: twilio-transformer
+channel: stable
+version: v20200408
+summary: Transform input parameters to a single string for twilio output
+build:
+  apiVersion: build/v1
+  kind: Docker
+publish:
+  repository: awrenn53/relay-twilio-renderer
+
+schemas:
+  spec:
+    source: file
+    file: spec.schema.json
+
+schemas:
+  spec:
+    $schema: http://json-schema.org/draft-07/schema#
+    type: object
+    properties:
+      template:
+        type: string
+        description: The template to fill out with the arguments - go's template/html syntax
+      parameters:
+        type: string
+        description: JSON Object to call template.Render with for the above template
+ outputs:
+   $schema: http://json-schema.org/draft-07/schema#
+    type: object
+    properties:
+      result:
+        type: string
+        description: The renered template
+
+examples:
+  - summary: Transform a webhook payload in a rendered payload
+    content:
+      apiVersion: v1
+      kind: Step
+      name: Fill out template
+      image: awrenn53/relay-template-renderer
+      spec:
+        parameters: '{"from": "ACW"}'
+        template: "Hello world! From, {.from}"
+
+owner:
+  name: Andrew Wrenn
+  email: andrew@wren.io
