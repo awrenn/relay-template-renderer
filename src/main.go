@@ -16,6 +16,7 @@ type TemplateSpec struct {
 }
 
 func main() {
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	err := run()
 	if err != nil {
 		log.Fatal(err)
