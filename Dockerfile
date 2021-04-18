@@ -10,4 +10,6 @@ FROM debian:latest
 
 COPY --from=build /pkg/renderder /bin/renderer
 
+RUN apt update; apt install curl -y; rm -rf /var/lib/apt/lists/*
+
 CMD ["/bin/renderer"]
