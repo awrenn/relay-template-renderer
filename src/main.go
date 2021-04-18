@@ -1,8 +1,11 @@
 package main
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"flag"
+	"html/template"
 	"log"
 	"time"
 
@@ -36,11 +39,26 @@ func run() error {
 
 	planOpts := taskutil.DefaultPlanOptions{SpecURL: *specURL}
 	spec := TemplateSpec{}
-	if err := taskutil.PopulateSpecFromDefaultPlan(&spec, planOpts); err != nil {
+	err = taskutil.PopulateSpecFromDefaultPlan(&spec, planOpts)
+	if err != nil {
 		return err
 	}
-	log.Printf("DEBUG: %+v", planOpts)
-	log.Printf("DEBUG spec: %+v", spec)
+
+	// Parameters must be an object when done this way - maybe we can detect for array types someway?
+	params := make(map[string]interface{})
+	err = json.Unmarshal([]byte(spec.Parameters), &params)
+	if err != nil {
+		return err
+	}
+	t, err := template.New("Render Template").Parse(spec.Template)
+	if err != nil {
+		return err
+	}
+	buf := bytes.NewBuffer(make([]byte, 0, len(spec.Parameters)+len(spec.Template)))
+	err = t.Execute(buf, params)
+	if err != nil {
+		return err
+	}
 
 	oc, err := outputs.NewDefaultOutputsClientFromNebulaEnv()
 	if err != nil {
@@ -49,7 +67,7 @@ func run() error {
 
 	ctx, cls := context.WithTimeout(context.Background(), 5*time.Minute)
 	defer cls()
-	if err := oc.SetOutput(ctx, spec.Output, "Hello world!"); err != nil {
+	if err := oc.SetOutput(ctx, spec.Output, buf.String()); err != nil {
 		return err
 	}
 	return nil
