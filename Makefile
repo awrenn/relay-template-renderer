@@ -1,4 +1,4 @@
-repo:=awrenn53/relay-twilio-renderer
+repo:=awrenn53/relay-template-renderer
 tag:=latest
 
 image: 
