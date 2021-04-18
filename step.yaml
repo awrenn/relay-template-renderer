@@ -26,6 +26,9 @@ schemas:
       parameters:
         type: string
         description: JSON Object to call template.Render with for the above template
+      output:
+        type: string
+        description: The variable name to output the rendered template to - useful for matching input of next stage
  outputs:
    $schema: http://json-schema.org/draft-07/schema#
     type: object
