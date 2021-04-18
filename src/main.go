@@ -13,6 +13,7 @@ import (
 type TemplateSpec struct {
 	Template   string `spec:"template"`
 	Parameters string `spec:"parameters"`
+	Output     string `spec:"output"`
 }
 
 func main() {
@@ -39,6 +40,7 @@ func run() error {
 		return err
 	}
 	log.Printf("DEBUG: %+v", planOpts)
+	log.Printf("DEBUG spec: %+v", spec)
 
 	oc, err := outputs.NewDefaultOutputsClientFromNebulaEnv()
 	if err != nil {
@@ -47,7 +49,7 @@ func run() error {
 
 	ctx, cls := context.WithTimeout(context.Background(), 5*time.Minute)
 	defer cls()
-	if err := oc.SetOutput(ctx, "output", "Hello world!"); err != nil {
+	if err := oc.SetOutput(ctx, spec.Output, "Hello world!"); err != nil {
 		return err
 	}
 	return nil
