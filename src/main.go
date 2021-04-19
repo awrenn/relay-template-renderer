@@ -4,12 +4,12 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"errors"
 	"flag"
 	"html/template"
 	"log"
 	"time"
 
+	"github.com/pkg/errors"
 	"github.com/puppetlabs/relay-sdk-go/pkg/outputs"
 	"github.com/puppetlabs/relay-sdk-go/pkg/taskutil"
 )
