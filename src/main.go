@@ -39,21 +39,19 @@ func run() error {
 
 	planOpts := taskutil.DefaultPlanOptions{SpecURL: *specURL}
 	spec := TemplateSpec{}
-	err = taskutil.PopulateSpecFromDefaultPlan(&spec, planOpts)
-	if err != nil {
+
+	if err := taskutil.PopulateSpecFromDefaultPlan(&spec, planOpts); err != nil {
 		return err
 	}
 
 	// Parameters must be an object when done this way - maybe we can detect for array types someway?
-	//params := make(map[string]interface{})
 	params := spec.Parameters
 	t, err := template.New("Render Template").Parse(spec.Template)
 	if err != nil {
 		return err
 	}
 	buf := bytes.NewBuffer(make([]byte, 0, len(spec.Parameters)+len(spec.Template)))
-	err = t.Execute(buf, params)
-	if err != nil {
+	if err := t.Execute(buf, params); err != nil {
 		return errors.Wrap(err, "Could not fill out template")
 	}
 
