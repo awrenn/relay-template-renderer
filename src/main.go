@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"flag"
 	"html/template"
 	"log"
@@ -48,8 +49,9 @@ func run() error {
 	params := make(map[string]interface{})
 	err = json.Unmarshal([]byte(spec.Parameters), &params)
 	if err != nil {
-		return err
+		return errors.Wrap(err, "Could not unmarshal json payload")
 	}
+	log.Printf("DEBUG Params: %+v\n", params)
 	t, err := template.New("Render Template").Parse(spec.Template)
 	if err != nil {
 		return err
@@ -57,7 +59,7 @@ func run() error {
 	buf := bytes.NewBuffer(make([]byte, 0, len(spec.Parameters)+len(spec.Template)))
 	err = t.Execute(buf, params)
 	if err != nil {
-		return err
+		return errors.Wrap(err, "Could not fill out template")
 	}
 
 	oc, err := outputs.NewDefaultOutputsClientFromNebulaEnv()
