@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"context"
-	"encoding/json"
 	"flag"
 	"html/template"
 	"log"
@@ -15,9 +14,9 @@ import (
 )
 
 type TemplateSpec struct {
-	Template   string `spec:"template"`
-	Parameters string `spec:"parameters"`
-	Output     string `spec:"output"`
+	Template   string                 `spec:"template"`
+	Parameters map[string]interface{} `spec:"parameters"`
+	Output     string                 `spec:"output"`
 }
 
 func main() {
@@ -46,12 +45,8 @@ func run() error {
 	}
 
 	// Parameters must be an object when done this way - maybe we can detect for array types someway?
-	params := make(map[string]interface{})
-	err = json.Unmarshal([]byte(spec.Parameters), &params)
-	if err != nil {
-		return errors.Wrap(err, "Could not unmarshal json payload")
-	}
-	log.Printf("DEBUG Params: %+v\n", params)
+	//params := make(map[string]interface{})
+	params := spec.Parameters
 	t, err := template.New("Render Template").Parse(spec.Template)
 	if err != nil {
 		return err
