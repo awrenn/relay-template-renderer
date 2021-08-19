@@ -27,6 +27,13 @@ func main() {
 	}
 }
 
+var addedFuncs = template.FuncMap{
+	"add": add,
+	"sub": sub,
+	"mul": mul,
+	"div": div,
+}
+
 func run() error {
 	defaultMetadataSpecURL, err := taskutil.MetadataSpecURL()
 	if err != nil {
@@ -46,7 +53,7 @@ func run() error {
 
 	// Parameters must be an object when done this way - maybe we can detect for array types someway?
 	params := spec.Parameters
-	t, err := template.New("Render Template").Parse(spec.Template)
+	t, err := template.New("Render Template").Funcs(addedFuncs).Parse(spec.Template)
 	if err != nil {
 		return err
 	}
@@ -66,4 +73,20 @@ func run() error {
 		return err
 	}
 	return nil
+}
+
+func add(i, j int) int {
+	return i + j
+}
+
+func sub(i, j int) int {
+	return i - j
+}
+
+func mul(i, j int) int {
+	return i * j
+}
+
+func div(i, j int) int {
+	return i / j
 }
