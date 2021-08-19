@@ -16,5 +16,5 @@ Self-explanatory binomial functions:
 `mul(i, j int) int`
 `div(i, j int) int` 
 
-Convert a date to a prettier format than default time:    
-`date(t time.Time) string`
+Convert a date string to a prettier format than default time - original must be RFC3339, or default JSON time format:  
+`date(s string) string`

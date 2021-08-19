@@ -92,6 +92,10 @@ func div(i, j int) int {
 	return i / j
 }
 
-func date(b time.Time) string {
-	return b.Format(time.RFC850)
+func date(s string) string {
+	t, err := time.Parse(time.RFC3339, s)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return t.Format(time.RFC850)
 }
