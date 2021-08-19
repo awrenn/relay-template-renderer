@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 	"flag"
-	"html/template"
+	"text/template"
 	"log"
 	"time"
 
