@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"context"
 	"flag"
-	"text/template"
 	"log"
+	"text/template"
 	"time"
 
 	"github.com/pkg/errors"
@@ -28,10 +28,11 @@ func main() {
 }
 
 var addedFuncs = template.FuncMap{
-	"add": add,
-	"sub": sub,
-	"mul": mul,
-	"div": div,
+	"add":  add,
+	"sub":  sub,
+	"mul":  mul,
+	"div":  div,
+	"date": date,
 }
 
 func run() error {
@@ -89,4 +90,8 @@ func mul(i, j int) int {
 
 func div(i, j int) int {
 	return i / j
+}
+
+func date(b time.Time) string {
+	return b.Format(time.RFC850)
 }

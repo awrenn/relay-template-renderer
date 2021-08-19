@@ -14,4 +14,7 @@ Self-explanatory binomial functions:
 `add(i, j int) int`
 `sub(i, j int) int`
 `mul(i, j int) int`
-`div(i, j int) int`
+`div(i, j int) int` 
+
+Convert a date to a prettier format than default time:    
+`date(t time.Time) string`
